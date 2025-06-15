@@ -35,6 +35,10 @@ import Individuel from './Components/SCTIndividuel'
 import IndividuelTest from './Components/SCTIndividuelTest'
 import DelegationNL from './Components/DelegationNL'
 
+const questionnaireConfig = [
+  { path: '/assertivite', component: Assertivite },
+];
+
 function App() {
   return (
     <HashRouter className="Route">
@@ -64,7 +68,9 @@ function App() {
         <Route path="/tki/fr" component={Tki}/>
         <Route path="/tki/en" component={TKI_EN}/>
         <Route path="/tki/nl" component={TKI_NM}/>
-        <Route path="/assertivite" component={Assertivite}/>
+        {questionnaireConfig.map((q, idx) => (
+          <Route key={idx} path={q.path} component={q.component} />
+        ))}
         <Route path="/assertiviteit" component={Assertiviteit}/>
         <Route path="/assertiveness" component={Assertiveness}/>
         <Route path="/leadership" component={Leadership}/>
