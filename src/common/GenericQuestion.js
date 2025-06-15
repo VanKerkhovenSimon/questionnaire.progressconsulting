@@ -119,46 +119,68 @@ export default class GenericQuestion extends Component {
             this.props.handleclick(data);
         }
 
-        if(e.target.value > 0)
+        if(!this.props.question.choices){
+            if(e.target.value > 0)
+                {
+                    const Truecolors = this.state.Truecolors;
+                    const Falsecolors = this.state.Falsecolors;
+                    Truecolors.color = 'white';
+                    Truecolors.background = '#F39325';
+
+                    Falsecolors.color = '#002F47';
+                    Falsecolors.background = 'transparent';
+                    Truecolors.selected = true;
+                    Falsecolors.selected = false;
+
+                    this.setState({
+                        boxesColor : '#F39325',
+                        Truecolors,
+                        Falsecolors,
+                        oldValue : e.target.value
+                    });
+                }
+            else
             {
                 const Truecolors = this.state.Truecolors;
                 const Falsecolors = this.state.Falsecolors;
-                Truecolors.color = 'white';
-                Truecolors.background = '#F39325';
-
-                Falsecolors.color = '#002F47';
-                Falsecolors.background = 'transparent';
-                Truecolors.selected = true;
-                Falsecolors.selected = false;
-
+                Truecolors.color = '#002F47';
+                Truecolors.background = 'transparent';
+                Falsecolors.color = 'white';
+                Falsecolors.background = '#DE0156';
+                Truecolors.selected = false;
+                Falsecolors.selected = true;
                 this.setState({
-                    boxesColor : '#F39325',
+                    boxesColor : '#DE0156',
                     Truecolors,
                     Falsecolors,
                     oldValue : e.target.value
                 });
             }
-        else
-        {
-            const Truecolors = this.state.Truecolors;
-            const Falsecolors = this.state.Falsecolors;
-            Truecolors.color = '#002F47';
-            Truecolors.background = 'transparent';
-            Falsecolors.color = 'white';
-            Falsecolors.background = '#DE0156';
-            Truecolors.selected = false;
-            Falsecolors.selected = true;
-            this.setState({
-                boxesColor : '#DE0156',
-                Truecolors,
-                Falsecolors,
-                oldValue : e.target.value
-            });
+        }else{
+            this.setState({ oldValue : e.target.value });
         }
     }
 
     render() {
         const { question, index, trueLabel = 'Vrai', falseLabel = 'Faux' } = this.props;
+        if (question.choices) {
+            return (
+                <tr className="question">
+                    <td className="question-number">{index + 1}</td>
+                    <td className="question-text">
+                        <div className="checklist">
+                            {question.choices.map((choice, idx) => (
+                                <div key={idx} className="checklistItem">
+                                    <input type="radio" id={`${question.id}-${choice.id}`} name={question.id} value={choice.value} onClick={this.handleClick} />
+                                    <label className="checkbox-label" htmlFor={`${question.id}-${choice.id}`} />
+                                    <p>{choice.name}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </td>
+                </tr>
+            );
+        }
         return (
             <tr className="question">
             <td className="question-number">{index+1} </td>
